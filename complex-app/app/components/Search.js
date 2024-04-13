@@ -138,7 +138,7 @@ function Search() {
                         />{" "}
                         <strong>{posts.title}</strong>{" "}
                         <span className="text-muted small">
-                          by {posts.author.username}on {formattedDate}{" "}
+                          by {posts.author.username} on {formattedDate}{" "}
                         </span>
                       </Link>
                     );

@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import LoadingDots from "./LoadingDotsIcon";
 
-function ProfilePosts() {
+function ProfileFollowers() {
   const [isLoading, setIsLoading] = useState(true);
   const [posts, setPosts] = useState();
   const { username } = useParams();
@@ -12,7 +12,7 @@ function ProfilePosts() {
     const ourRequest = Axios.CancelToken.source();
     async function fetchPosts() {
       try {
-        const response = await Axios.get(`/profile/${username}/posts`, {
+        const response = await Axios.get(`/profile/${username}/followers`, {
           cancelToken: ourRequest.token,
         });
         setPosts(response.data);
@@ -20,7 +20,7 @@ function ProfilePosts() {
       } catch (error) {
         console.log(error.response.data);
       }
-    }
+    } /*  */
     fetchPosts();
     return () => {
       ourRequest.cancel();
@@ -30,20 +30,15 @@ function ProfilePosts() {
   if (isLoading) return <LoadingDots />;
   return (
     <div className="list-group">
-      {posts.map((post) => {
-        const date = new Date(post.createdDate);
-        const formattedDate = `${
-          date.getMonth() + 1
-        }/${date.getDate()}/${date.getFullYear()}`;
+      {posts.map((follower, index) => {
         return (
           <Link
-            key={post._id}
-            to={`/post/${post._id}`}
+            key={index}
+            to={`/profile/${follower.username}`}
             className="list-group-item list-group-item-action"
           >
-            <img className="avatar-tiny" src={post.author.avatar} />{" "}
-            <strong>{post.title}</strong>{" "}
-            <span className="text-muted small">on {formattedDate} </span>
+            <img className="avatar-tiny" src={follower.avatar} />
+            {follower.username}
           </Link>
         );
       })}
@@ -51,4 +46,4 @@ function ProfilePosts() {
   );
 }
 
-export default ProfilePosts;
+export default ProfileFollowers;
