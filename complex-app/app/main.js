@@ -33,6 +33,8 @@ function Main() {
       username: localStorage.getItem("appUsername"),
     },
     isSearchOpen: false,
+    isChatOpen: false,
+    unreadChatCount: 0,
   };
   function ourReducer(draft, action) {
     switch (action.type) {
@@ -52,6 +54,17 @@ function Main() {
       case "closeSearch":
         draft.isSearchOpen = false;
         return;
+      case "toggleChat":
+        draft.isChatOpen = !draft.isChatOpen;
+        return;
+      case "closeChat":
+        draft.isChatOpen = false;
+        return;
+      case "increaseChatCount":
+        draft.unreadChatCount++;
+        return;
+      case "clearChatCount":
+        draft.unreadChatCount = 0;
     }
   }
   const [state, dispatch] = useImmerReducer(ourReducer, initialState);
