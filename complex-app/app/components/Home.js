@@ -40,7 +40,15 @@ function Home() {
     <Page title="Your Feed">
       {state.feed.length > 0 && (
         <>
-          <h2 className="text-center mb-4">The latest from those you follow</h2>
+          <h2 className="text-center">
+            Hello{" "}
+            <strong>
+              {appState.user.username.charAt(0).toUpperCase() +
+                appState.user.username.slice(1)}
+            </strong>
+            , latest posts from those you follow!
+          </h2>
+
           <div className="list-group">
             {state.feed.map((posts) => {
               return <Post posts={posts} key={posts._id} />;
@@ -51,7 +59,12 @@ function Home() {
       {state.feed.length == 0 && (
         <>
           <h2 className="text-center">
-            Hello <strong>{appState.user.username}</strong>, your feed is empty.
+            Hello{" "}
+            <strong>
+              {appState.user.username.charAt(0).toUpperCase() +
+                appState.user.username.slice(1)}
+            </strong>
+            , your feed is empty.
           </h2>
           <p className="lead text-muted text-center">
             Your feed displays the latest posts from the people you follow. If

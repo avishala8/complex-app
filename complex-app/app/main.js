@@ -79,6 +79,36 @@ function Main() {
       localStorage.removeItem("appAvatar");
     }
   }, [state.loggedIn]);
+  //check if token is expired on first render
+  useEffect(() => {
+    if (state.loggedIn) {
+      const ourRequest = Axios.CancelToken.source();
+      async function fetchResult() {
+        try {
+          const response = await Axios.post(
+            "/checkToken",
+            { token: state.user.token },
+            { cancelToken: ourRequest.token }
+          );
+          if (response.data) {
+            dispatch({ type: "logout" });
+            dispatch({
+              type: "flashMessage",
+              value: "The session has expired. Please Login again!",
+            });
+          }
+
+          console.log(response.data);
+        } catch (error) {
+          console.log(error);
+        }
+      }
+      fetchResult();
+      return () => {
+        ourRequest.cancel();
+      };
+    }
+  }, [state.requestCount]);
 
   return (
     <StateContext.Provider value={state}>
