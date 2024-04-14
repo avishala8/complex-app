@@ -1,10 +1,11 @@
-import React, { useEffect, useReducer, useState } from "react";
+import React, { useEffect, useReducer, useState, Suspense } from "react";
 import { useImmerReducer } from "use-immer";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { CSSTransition } from "react-transition-group";
 import Axios from "axios";
-Axios.defaults.baseURL = "http://localhost:8080/";
+Axios.defaults.baseURL =
+  process.env.BACKENDURL || "https://complex-backend.onrender.com";
 // My components
 import Header from "./components/Header";
 import Footer from "./components/Footer";
@@ -12,16 +13,21 @@ import HomeGuest from "./components/HomeGuest";
 import Terms from "./components/Terms";
 import About from "./components/About";
 import Home from "./components/Home";
-import CreatePost from "./components/CreatePost";
-import ViewSinglePost from "./components/ViewSinglePost";
+const CreatePost = React.lazy(() => import("./components/CreatePost"));
+const ViewSinglePost = React.lazy(() => import("./components/ViewSinglePost"));
+const Search = React.lazy(() => import("./components/Search"));
+const Chat = React.lazy(() => import("./components/Chat"));
+
+// import ViewSinglePost from "./components/ViewSinglePost";
 import FlashMessages from "./components/FlashMessages";
 import StateContext from "./components/StateContext";
 import DispatchContext from "./components/DispatchContext";
 import Profile from "./components/Profile";
 import EditPost from "./components/EditPost";
 import NotFound from "./components/NotFound";
-import Search from "./components/Search";
-import Chat from "./components/Chat";
+// import Search from "./components/Search";
+// import Chat from "./components/Chat";
+import LoadingDots from "./components/LoadingDotsIcon";
 
 function Main() {
   const initialState = {
@@ -90,15 +96,13 @@ function Main() {
             { token: state.user.token },
             { cancelToken: ourRequest.token }
           );
-          if (response.data) {
+          if (!response.data) {
             dispatch({ type: "logout" });
             dispatch({
               type: "flashMessage",
               value: "The session has expired. Please Login again!",
             });
           }
-
-          console.log(response.data);
         } catch (error) {
           console.log(error);
         }
@@ -108,7 +112,7 @@ function Main() {
         ourRequest.cancel();
       };
     }
-  }, [state.requestCount]);
+  }, []);
 
   return (
     <StateContext.Provider value={state}>
@@ -116,50 +120,56 @@ function Main() {
         <BrowserRouter>
           <FlashMessages message={state.flashMessages} />
           <Header />
-          <Routes>
-            <Route
-              path="/"
-              element={state.loggedIn ? <Home /> : <HomeGuest />}
-            />
+          <Suspense fallback={<LoadingDots />}>
+            <Routes>
+              <Route
+                path="/"
+                element={state.loggedIn ? <Home /> : <HomeGuest />}
+              />
 
-            <Route
-              path="/about-us"
-              element={state.loggedIn ? <About /> : <HomeGuest />}
-            />
-            <Route
-              path="/terms"
-              element={state.loggedIn ? <Terms /> : <HomeGuest />}
-            />
-            <Route
-              path="/create-post"
-              element={state.loggedIn ? <CreatePost /> : <HomeGuest />}
-            />
-            <Route
-              path="/profile/:username/*"
-              element={state.loggedIn ? <Profile /> : <HomeGuest />}
-            />
-            <Route
-              path="/post/:id"
-              element={state.loggedIn ? <ViewSinglePost /> : <HomeGuest />}
-            />
-            <Route
-              path="/post/:id/edit"
-              element={state.loggedIn ? <EditPost /> : <HomeGuest />}
-            />
-            <Route
-              path="*"
-              element={state.loggedIn ? <NotFound /> : <HomeGuest />}
-            />
-          </Routes>
+              <Route
+                path="/about-us"
+                element={state.loggedIn ? <About /> : <HomeGuest />}
+              />
+              <Route
+                path="/terms"
+                element={state.loggedIn ? <Terms /> : <HomeGuest />}
+              />
+              <Route
+                path="/create-post"
+                element={state.loggedIn ? <CreatePost /> : <HomeGuest />}
+              />
+              <Route
+                path="/profile/:username/*"
+                element={state.loggedIn ? <Profile /> : <HomeGuest />}
+              />
+              <Route
+                path="/post/:id"
+                element={state.loggedIn ? <ViewSinglePost /> : <HomeGuest />}
+              />
+              <Route
+                path="/post/:id/edit"
+                element={state.loggedIn ? <EditPost /> : <HomeGuest />}
+              />
+              <Route
+                path="*"
+                element={state.loggedIn ? <NotFound /> : <HomeGuest />}
+              />
+            </Routes>
+          </Suspense>
           <CSSTransition
             timeout={330}
             in={state.isSearchOpen}
             classNames="search-overlay"
             unmountOnExit
           >
-            <Search />
+            <div className="search-overlay">
+              <Suspense fallback="">
+                <Search />
+              </Suspense>
+            </div>
           </CSSTransition>
-          <Chat />
+          <Suspense fallback="">{state.loggedIn && <Chat />}</Suspense>
 
           <Footer />
         </BrowserRouter>
