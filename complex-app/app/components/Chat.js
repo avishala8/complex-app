@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, use, useRef } from "react";
+import React, { useContext, useEffect, useRef } from "react";
 import StateContext from "./StateContext";
 import DispatchContext from "./DispatchContext";
 import { useImmer } from "use-immer";
@@ -70,7 +70,7 @@ function Chat() {
           (appState.isChatOpen ? "chat-wrapper--is-visible" : "")
         }
       >
-        <div className="chat-title-bar bg-primary">
+        <div className="chat-title-bar ">
           Chat
           <span
             className="chat-title-bar-close"

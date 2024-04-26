@@ -7,6 +7,7 @@ import ProfilePosts from "./ProfilePosts";
 import { useImmer } from "use-immer";
 import ProfileFollowers from "./ProfileFollowers";
 import ProfileFollowing from "./ProfileFollowing";
+import NotFound from "./NotFound";
 
 function Profile() {
   const appState = useContext(StateContext);
@@ -26,6 +27,7 @@ function Profile() {
         followingCount: "",
       },
     },
+    notFound: true,
   });
 
   useEffect(() => {
@@ -35,9 +37,12 @@ function Profile() {
         const response = await Axios.post(`/profile/${username}`, {
           token: appState.user.token,
         });
-        setState((draft) => {
-          draft.profileData = response.data;
-        });
+        if (response.data) {
+          setState((draft) => {
+            draft.profileData = response.data;
+            draft.notFound = false;
+          });
+        }
       }
       fetchData();
       return () => {
@@ -47,6 +52,7 @@ function Profile() {
       console.log(error.response.data);
     }
   }, [username]);
+
   useEffect(() => {
     if (state.startFollowingRequestCount) {
       setState((draft) => {
@@ -115,7 +121,9 @@ function Profile() {
       draft.stopFollowingRequestCount++;
     });
   }
-
+  if (state.notFound) {
+    return <NotFound />;
+  }
   return (
     <Page title="User Profile">
       <h2>

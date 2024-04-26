@@ -21,6 +21,16 @@ body {
   top: 3px;
 }
 
+.btn-primar {
+  color: #fff;
+  background-color: #212529;
+  border-color: #212529;
+}
+.btn-primar:hover {
+  color: #fff;
+  background-color: #44494f;
+  border-color: #212529;
+}
 .chat-count-badge {
   text-align: center;
   position: absolute;
@@ -71,13 +81,18 @@ body {
   border-color: transparent;
   color: #ffffff;
 }
-
+.input-post:focus {
+  color: #0a0a0a;
+  border-color: #2c3640;
+  outline: 0;
+  box-shadow: 0 0 0 0.2rem rgba(30, 34, 37, 0.25);
+}
 .input-dark:focus {
   color: #ffffff;
   background-color: #555;
-  border-color: #80bdff;
+  border-color: #2c3640;
   outline: 0;
-  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+  box-shadow: 0 0 0 0.2rem rgba(30, 34, 37, 0.25);
 }
 
 .input-dark::-webkit-input-placeholder {
@@ -218,7 +233,7 @@ textarea.tall-textarea {
 }
 
 .search-overlay-icon {
-  color: #007bff;
+  color: #292a2b;
   font-size: 1.4rem;
   margin: 0;
   margin-right: 10px;
@@ -230,7 +245,7 @@ textarea.tall-textarea {
   font-size: 1.1rem;
   outline: none;
   flex: 1;
-  color: #007bff;
+  color: #27282a;
 }
 
 .live-search-results {
@@ -396,7 +411,7 @@ textarea.tall-textarea {
   text-align: right;
   padding: 4px 7px;
   border-radius: 12px;
-  background-color: #08386c;
+  background-color: #25282c;
   color: #fff;
 }
 

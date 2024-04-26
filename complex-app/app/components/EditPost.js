@@ -164,7 +164,7 @@ function EditPost() {
             value={state.title.value}
             name="title"
             id="post-title"
-            className="form-control form-control-lg form-control-title"
+            className="form-control form-control-lg form-control-title input-post"
             type="text"
             placeholder=""
             autoComplete="off"
@@ -190,7 +190,7 @@ function EditPost() {
             value={state.body.value}
             name="body"
             id="post-body"
-            className="body-content tall-textarea form-control"
+            className="body-content tall-textarea form-control input-post"
             type="text"
             onChange={(e) => {
               dispatch({ type: "bodyChange", value: e.target.value });
@@ -206,7 +206,7 @@ function EditPost() {
           )}
         </div>
 
-        <button className="btn btn-primary" disabled={state.isSaving}>
+        <button className="btn btn-primar" disabled={state.isSaving}>
           Save Updates
         </button>
       </form>

@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import LoadingDots from "./LoadingDotsIcon";
 import Post from "./Post";
+import NotFound from "./NotFound";
 
 function ProfilePosts() {
   const [isLoading, setIsLoading] = useState(true);
@@ -16,6 +17,9 @@ function ProfilePosts() {
         const response = await Axios.get(`/profile/${username}/posts`, {
           cancelToken: ourRequest.token,
         });
+        if (!response.data) {
+          return <NotFound />;
+        }
         setPosts(response.data);
         setIsLoading(false);
       } catch (error) {

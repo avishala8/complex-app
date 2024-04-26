@@ -38,7 +38,7 @@ function CreatePost(props) {
             autoFocus
             name="title"
             id="post-title"
-            className="form-control form-control-lg form-control-title"
+            className="form-control form-control-lg form-control-title input-post"
             type="text"
             placeholder=""
             autoComplete="off"
@@ -53,13 +53,18 @@ function CreatePost(props) {
           <textarea
             name="body"
             id="post-body"
-            className="body-content tall-textarea form-control"
+            className="body-content tall-textarea form-control input-post"
             type="text"
             onChange={(e) => setBody(e.target.value)}
           ></textarea>
         </div>
 
-        <button className="btn btn-primary">Save New Post</button>
+        <button
+          className="btn btn-primar"
+          disabled={title == null || body == null}
+        >
+          Save New Post
+        </button>
       </form>
     </Page>
   );
